@@ -28,7 +28,7 @@ clean-pyc: ## remove Python file artifacts
 	find . -name '*~' -exec rm -f {} +
 
 lint: ## check style with flake8
-	flake8 src/magic_cards tests
+	flake8 src/fab_cards tests
 
 test: ## run tests quickly with the default Python
 	python runtests.py tests
@@ -37,13 +37,13 @@ test-all: ## run tests on every Python version with tox
 	tox
 
 coverage: ## check code coverage quickly with the default Python
-	coverage run --source magic_cards runtests.py tests
+	coverage run --source fab_cards runtests.py tests
 	coverage report -m
 	coverage html
 	open htmlcov/index.html
 
 docs: ## generate Sphinx HTML documentation
-	rm -f docs/django-magic-cards.rst
+	rm -f docs/django-fab-cards.rst
 	rm -f docs/modules.rst
 	$(MAKE) -C docs clean
 	$(MAKE) -C docs html
