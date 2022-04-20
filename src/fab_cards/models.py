@@ -35,7 +35,7 @@ class Card(NameMixin, models.Model):
     @property
     def color_bar(self):
         if self.resource:
-            return ('red', 'yellow', 'blue')[self.resource-1]
+            return ('red', 'yellow', 'blue')[int(self.resource)-1]
         return False
 
     def __str__(self):
