@@ -30,7 +30,7 @@ class Card(NameMixin, models.Model):
 
     @property
     def needs_disambig(self):
-        return self.identifier.split('-')[-1] in ('red', 'yellow', 'blue')
+        return self.identifier.split('-')[-1] in ('red', 'yellow', 'blue') and self.resource
 
     @property
     def color_bar(self):
