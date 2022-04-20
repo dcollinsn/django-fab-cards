@@ -73,6 +73,8 @@ class Printing(models.Model):
     printing_id = models.PositiveIntegerField(blank=True, null=True)
     image_url = models.CharField(max_length=256, null=True, blank=True)
 
+    language = models.CharField(max_length=2, default="en")
+
     def __str__(self):
         return '{} ({})'.format(self.card, self.set.code)
 

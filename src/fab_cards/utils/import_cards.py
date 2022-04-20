@@ -85,6 +85,7 @@ def parse_data(all_data):
                 'finish': printing['sku']['finish'],
                 'printing_id': printing['id'],
                 'image_url': printing['image'],
+                'language': printing['language'],
             }
             Printing.objects.update_or_create(
                 sku=printing_sku,

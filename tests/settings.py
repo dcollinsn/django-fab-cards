@@ -22,7 +22,7 @@ INSTALLED_APPS = [
     "django.contrib.auth",
     "django.contrib.contenttypes",
     "django.contrib.sites",
-    "magic_cards",
+    "fab_cards",
 ]
 
 SITE_ID = 1
