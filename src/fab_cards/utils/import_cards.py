@@ -60,6 +60,9 @@ def parse_data(all_data):
     # Process the data set-by-set
     for card_data in all_data:
         if card_data['identifier'] in blacklisted_identifiers:
+            cards = Card.objects.filter(identifier=card_data['identifier'])
+            if cards:
+                cards.delete()
             continue
 
         # Get or create the card
