@@ -51,8 +51,14 @@ def parse_data(all_data):
     # Load relevant sets into memory
     cache[Set] = {obj.code.lower(): obj for obj in Set.objects.all()}
 
+    blacklisted_identifiers = [
+        'scar-for-a-scar', # Duplicate of 'scar-for-a-scar-red'
+    ]
     # Process the data set-by-set
     for card_data in all_data:
+        if card_data['identifier'] in blacklisted_identifiers:
+            continue
+
         # Get or create the card
         defaults = {'name': card_data['name']}
         if 'text' in card_data:
