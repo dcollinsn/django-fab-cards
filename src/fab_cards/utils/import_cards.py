@@ -53,6 +53,9 @@ def parse_data(all_data):
 
     blacklisted_identifiers = [
         'scar-for-a-scar', # Duplicate of 'scar-for-a-scar-red'
+        'crazy-brew-blue', # Duplicate of 'crazy-brew'
+        'boneyard-marauder', # Duplicate of 'boneyard-marauder-red'
+        'cracked-bauble-yellow', # Duplicate of 'cracked-bauble'
     ]
     # Process the data set-by-set
     for card_data in all_data:
