@@ -16,7 +16,7 @@ class NameMixin(object):
 class Card(NameMixin, models.Model):
     identifier = models.CharField(max_length=255, unique=True)
     name = models.CharField(max_length=255)
-    text = models.TextField(null=True, blank=True)
+    text = models.TextField(blank=True, default="")
 
     keywords = models.CharField(max_length=255, null=True, blank=True)
 
