@@ -1,5 +1,6 @@
 import io
 import json
+import re
 import zipfile
 from contextlib import closing
 
@@ -52,12 +53,33 @@ def parse_data(all_data):
     cache[Set] = {obj.code.lower(): obj for obj in Set.objects.all()}
 
     blacklisted_identifiers = [
-        'scar-for-a-scar', # Duplicate of 'scar-for-a-scar-red'
         'crazy-brew-blue', # Duplicate of 'crazy-brew'
-        'boneyard-marauder', # Duplicate of 'boneyard-marauder-red'
         'cracked-bauble-yellow', # Duplicate of 'cracked-bauble'
     ]
-    # Process the data set-by-set
+
+    # We apparently need to pre-process this in order to remove duplicated identifiers.
+    name_to_identifier = {}
+    for card_data in all_data:
+        name = card_data['name'].lower()
+        if card_data['identifier'] in blacklisted_identifiers:
+            continue
+        if name not in name_to_identifier:
+            name_to_identifier[name] = []
+        name_to_identifier[name].append(card_data['identifier'])
+    for name, identifiers in name_to_identifier.items():
+        has_pitch = False
+        has_non_pitch = False
+        non_pitch_identifiers = []
+        for identifier in identifiers:
+            if re.search(r'-(?:red|yellow|blue)$', identifier):
+                has_pitch = True
+            else:
+                has_non_pitch = True
+                non_pitch_identifiers.append(identifier)
+        if has_pitch and has_non_pitch:
+            for identifier in non_pitch_identifiers:
+                blacklisted_identifiers.append(identifier)
+
     for card_data in all_data:
         if card_data['identifier'] in blacklisted_identifiers:
             cards = Card.objects.filter(identifier=card_data['identifier'])
@@ -67,8 +89,10 @@ def parse_data(all_data):
 
         # Get or create the card
         defaults = {'name': card_data['name']}
-        if 'text' in card_data:
+        if 'text' in card_data and card_data['text']:
             defaults['text'] = card_data['text']
+        else:
+            defaults['text'] = ''
         if 'keywords' in card_data:
             defaults['keywords'] = ' '.join(card_data['keywords'])
         if 'rarity' in card_data:
