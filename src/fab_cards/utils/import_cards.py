@@ -55,10 +55,13 @@ def parse_data(all_data):
     blacklisted_identifiers = [
         'crazy-brew-blue', # Duplicate of 'crazy-brew'
         'cracked-bauble-yellow', # Duplicate of 'cracked-bauble'
+        'flock-of-the-featherwalkers', # Not a real card
+        'flock-of-the-featherwalkers-red', # Not a real card
     ]
 
     # We apparently need to pre-process this in order to remove duplicated identifiers.
     name_to_identifier = {}
+    correct_identifiers = []
     for card_data in all_data:
         name = card_data['name'].lower()
         if card_data['identifier'] in blacklisted_identifiers:
@@ -66,6 +69,7 @@ def parse_data(all_data):
         if name not in name_to_identifier:
             name_to_identifier[name] = []
         name_to_identifier[name].append(card_data['identifier'])
+        correct_identifiers.append(card_data['identifier'])
     for name, identifiers in name_to_identifier.items():
         has_pitch = False
         has_non_pitch = False
@@ -80,6 +84,12 @@ def parse_data(all_data):
             for identifier in non_pitch_identifiers:
                 blacklisted_identifiers.append(identifier)
 
+    # Remove bad cards
+    for card in Card.objects.all():
+        if card.identifier not in correct_identifiers:
+            card.delete()
+
+    # Update cards
     for card_data in all_data:
         if card_data['identifier'] in blacklisted_identifiers:
             cards = Card.objects.filter(identifier=card_data['identifier'])
