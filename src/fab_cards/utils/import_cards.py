@@ -63,7 +63,7 @@ def parse_data(all_data):
     name_to_identifier = {}
     correct_identifiers = []
     for card_data in all_data:
-        name = card_data['name'].lower()
+        name = card_data['name'].lower().strip()
         if card_data['identifier'] in blacklisted_identifiers:
             continue
         if name not in name_to_identifier:
@@ -98,7 +98,7 @@ def parse_data(all_data):
             continue
 
         # Get or create the card
-        defaults = {'name': card_data['name']}
+        defaults = {'name': card_data['name'].strip()}
         if 'text' in card_data and card_data['text']:
             defaults['text'] = card_data['text']
         else:
